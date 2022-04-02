@@ -1,5 +1,6 @@
 package com.gabrielbog.openstream;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,22 @@ import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<MusicModel> musicList;
+    public interface ButtonClickListener {
+        void onButtonClick(View view, Button button, int position);
+    }
 
-    public RecyclerAdapter(ArrayList<MusicModel> musicList) {
-        this.musicList = musicList;
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+
+        void onItemLongClick(View view, RecyclerView recyclerView, int position);
+    }
+
+    private MusicListArrays musicListInstance;
+    private ButtonClickListener buttonClickListener;
+    private ItemClickListener itemClickListener;
+
+    public RecyclerAdapter() {
+        musicListInstance = MusicListArrays.getInstance();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -35,8 +48,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             musicAuthor = view.findViewById(R.id.musicAuthor);
             markButton = view.findViewById(R.id.markButton);
 
-            //add button touch listener to copy to the favorite fragment's arraylist
+            markButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (buttonClickListener != null) buttonClickListener.onButtonClick(view, markButton, getAdapterPosition());
+                }
+            });
         }
+    }
+
+    // allows clicks events to be caught
+    void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    // allows clicks events to be caught
+    void setButtonClickListener(ButtonClickListener buttonClickListener) {
+        this.buttonClickListener = buttonClickListener;
     }
 
     @NonNull
@@ -48,17 +76,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        String title = musicList.get(position).getTitle();
-        String author = musicList.get(position).getAuthor();
-        String link = musicList.get(position).getLink();
+        String title = musicListInstance.getNormalArrayElement(position).getTitle();
+        String author = musicListInstance.getNormalArrayElement(position).getAuthor();
+        String link = musicListInstance.getNormalArrayElement(position).getLink();
 
         //set image somehow
         holder.musicTitle.setText(title);
         holder.musicAuthor.setText(author);
+
+        //add button touch listener to copy to the favorite fragment's arraylist
+
+        //add recycler element listener for starting music
+
+        //add listener for holding element
     }
 
     @Override
     public int getItemCount() {
-        return musicList.size();
+        return musicListInstance.getNormalArraySize();
     }
+
+    //might be a good idea to make a reload array function
 }

@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
 
+    //make static music list arrays and their respective getter/setter and inserter/remover
+
     public MainActivity() {
         super(R.layout.activity_main);
     }

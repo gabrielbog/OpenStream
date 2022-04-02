@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.gabrielbog.openstream.models.MusicModel;
 
 import java.util.ArrayList;
 
-public class MusicListFragment extends Fragment {
+public class MusicListFragment extends Fragment implements RecyclerAdapter.ButtonClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,8 +29,8 @@ public class MusicListFragment extends Fragment {
     private String mParam2;
 
     private RecyclerView recyclerView;
-    private ArrayList<MusicModel> musicList;
-    private RecyclerAdapter recyclerAdapter;
+    private MusicListArrays musicListInstance;
+    private AdapterManager adapterInstance;
 
     public MusicListFragment() {
         // Required empty public constructor
@@ -59,16 +61,56 @@ public class MusicListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_music_list, container, false);
 
         recyclerView = view.findViewById(R.id.musicList);
-        musicList = new ArrayList<>();
+        musicListInstance = MusicListArrays.getInstance();
 
-        recyclerAdapter = new RecyclerAdapter(musicList);
+        MusicModel test;
+
+        //it would be a good idea to make a loading function, would be useful for loading data after uploading new music
+
+        test = new MusicModel("x", "y", "z");
+        musicListInstance.insertMusicElement(test);
+
+        test = new MusicModel("x", "z", "y");
+        musicListInstance.insertMusicElement(test);
+
+        test = new MusicModel("x", "z", "z");
+        musicListInstance.insertMusicElement(test);
+
+        //recycler adapter setup
+
+        adapterInstance = AdapterManager.getInstance();
+        adapterInstance.getRecyclerAdapter().setButtonClickListener(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setAdapter(adapterInstance.getRecyclerAdapter());
 
         //add on touch listener, transfer data over PlaybackFragment via a static function
 
         return view;
+    }
+
+    @Override
+    public void onButtonClick(View view, Button button, int position) {
+        addOrRemoveFavorite(button, position);
+    }
+
+    //button function
+    private void addOrRemoveFavorite(Button button, int position) {
+        //reference for favorites list: https://github.com/saini2sandeep/Favourite
+
+        MusicModel temp = musicListInstance.getNormalArrayElement(position);
+
+        if(temp.getFavorite() == true) {
+            button.setText("Mark As Fav");
+            musicListInstance.removeFavoriteMusicElement(temp);
+            adapterInstance.getRecyclerFavoriteAdapter().notifyItemRemoved(position);
+        }
+        else {
+            button.setText("Remove From Fav");
+            musicListInstance.insertFavoriteMusicElement(temp);
+            adapterInstance.getRecyclerFavoriteAdapter().notifyItemInserted(position);
+
+        }
     }
 }
