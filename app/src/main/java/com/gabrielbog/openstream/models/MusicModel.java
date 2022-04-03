@@ -1,10 +1,13 @@
 package com.gabrielbog.openstream.models;
 
+import androidx.lifecycle.ViewModel;
+
 public class MusicModel {
-    String title;
-    String author;
-    String link;
-    Boolean isFavorite;
+
+    private String title;
+    private String author;
+    private String link;
+    private Boolean isFavorite;
 
     public MusicModel(String title, String author, String link)
     {

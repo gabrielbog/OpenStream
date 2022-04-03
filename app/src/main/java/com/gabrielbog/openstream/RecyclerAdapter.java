@@ -35,7 +35,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         musicListInstance = MusicListArrays.getInstance();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView albumCover;
         private TextView musicTitle;
         private TextView musicAuthor;
@@ -48,12 +48,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             musicAuthor = view.findViewById(R.id.musicAuthor);
             markButton = view.findViewById(R.id.markButton);
 
+            //item click listener setup
+            view.setOnClickListener(this);
+
+            //button click listener action
             markButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (buttonClickListener != null) buttonClickListener.onButtonClick(view, markButton, getAdapterPosition());
                 }
             });
+        }
+
+        //item click listener action
+        @Override
+        public void onClick(View view) {
+            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -83,18 +93,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         //set image somehow
         holder.musicTitle.setText(title);
         holder.musicAuthor.setText(author);
-
-        //add button touch listener to copy to the favorite fragment's arraylist
-
-        //add recycler element listener for starting music
-
-        //add listener for holding element
     }
 
     @Override
     public int getItemCount() {
         return musicListInstance.getNormalArraySize();
     }
-
-    //might be a good idea to make a reload array function
 }

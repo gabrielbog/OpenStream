@@ -3,19 +3,22 @@ package com.gabrielbog.openstream;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gabrielbog.openstream.models.MusicModel;
+import com.gabrielbog.openstream.models.MusicViewModel;
 
 import java.util.ArrayList;
 
-public class FavoriteMusicListFragment extends Fragment {
+public class FavoriteMusicListFragment extends Fragment implements RecyclerFavoriteAdapter.ItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,6 +32,8 @@ public class FavoriteMusicListFragment extends Fragment {
     private RecyclerView recyclerView;
     private MusicListArrays favoriteMusicListInstance;
     private AdapterManager adapterInstance;
+
+    private MusicViewModel currentMusic;
 
     public FavoriteMusicListFragment() {
         // Required empty public constructor
@@ -61,6 +66,9 @@ public class FavoriteMusicListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.favoriteMusicList);
         favoriteMusicListInstance = MusicListArrays.getInstance();
 
+        //get viewmodel, new or existing
+        currentMusic = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
+
         MusicModel test;
 
         //it would be a good idea to make a loading function, would be useful for loading data after uploading new music
@@ -75,11 +83,29 @@ public class FavoriteMusicListFragment extends Fragment {
         //recycler adapter setup
 
         adapterInstance = AdapterManager.getInstance();
+        adapterInstance.getRecyclerFavoriteAdapter().setItemClickListener(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapterInstance.getRecyclerFavoriteAdapter());
 
         return view;
+    }
+
+    //item listener action
+    @Override
+    public void onItemClick(View view, int position) {
+        transferToPlaybackFrame(position);
+    }
+
+    private void transferToPlaybackFrame(int position) {
+        MusicModel temp = favoriteMusicListInstance.getFavoriteArrayElement(position);
+        currentMusic.getMusic().setValue(temp);
+    }
+
+    //holding item listener action
+    @Override
+    public void onItemLongClick(View view, RecyclerView recyclerView, int position) {
+
     }
 }

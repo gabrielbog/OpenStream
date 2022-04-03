@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 
 import com.gabrielbog.openstream.models.MusicModel;
+import com.gabrielbog.openstream.models.MusicViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
+    private MusicViewModel currentMusic;
 
     //make static music list arrays and their respective getter/setter and inserter/remover
 
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //get viewmodel, new or existing
+        currentMusic = new ViewModelProvider(this).get(MusicViewModel.class);
 
         viewPager = findViewById(R.id.pager);
         pagerAdapter = new FragmentAdapter(this);

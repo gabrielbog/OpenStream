@@ -16,15 +16,22 @@ import java.util.ArrayList;
 
 public class RecyclerFavoriteAdapter extends RecyclerView.Adapter<RecyclerFavoriteAdapter.MyViewHolder> {
 
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+
+        void onItemLongClick(View view, RecyclerView recyclerView, int position);
+    }
+
     private MusicListArrays favoriteMusicListInstance;
     private ArrayList<MusicModel> favoriteMusicList;
+    private ItemClickListener itemClickListener;
 
     public RecyclerFavoriteAdapter() {
         favoriteMusicListInstance = MusicListArrays.getInstance();
         favoriteMusicList = favoriteMusicListInstance.getFavoriteArray();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView albumCover;
         private TextView musicTitle;
         private TextView musicAuthor;
@@ -34,7 +41,21 @@ public class RecyclerFavoriteAdapter extends RecyclerView.Adapter<RecyclerFavori
             albumCover = view.findViewById(R.id.albumCover);
             musicTitle = view.findViewById(R.id.musicTitle);
             musicAuthor = view.findViewById(R.id.musicAuthor);
+
+            //item click listener setup
+            view.setOnClickListener(this);
         }
+
+        //item click listener action
+        @Override
+        public void onClick(View view) {
+            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
+        }
+    }
+
+    // allows clicks events to be caught
+    void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -54,27 +75,7 @@ public class RecyclerFavoriteAdapter extends RecyclerView.Adapter<RecyclerFavori
         holder.musicTitle.setText(title);
         holder.musicAuthor.setText(author);
 
-        //add recycler element listener for starting music
-
         //add hold listener
-
-        //updating the list
-        if(favoriteMusicListInstance.getFavoriteNotifier() == 0)
-        {
-            favoriteMusicList.clear();
-            favoriteMusicList.addAll(favoriteMusicListInstance.getFavoriteMusicList());
-            favoriteMusicListInstance.setFavoriteMusicList(favoriteMusicList);
-            favoriteMusicListInstance.setFavoriteNotifier(-1);
-            this.notifyItemInserted(favoriteMusicListInstance.getFavoritePosition());
-        }
-        else if(favoriteMusicListInstance.getFavoriteNotifier() == 1)
-        {
-            favoriteMusicList.clear();
-            favoriteMusicList.addAll(favoriteMusicListInstance.getFavoriteMusicList());
-            favoriteMusicListInstance.setFavoriteMusicList(favoriteMusicList);
-            favoriteMusicListInstance.setFavoriteNotifier(-1);
-            this.notifyItemRemoved(favoriteMusicListInstance.getFavoritePosition());
-        }
     }
 
     @Override

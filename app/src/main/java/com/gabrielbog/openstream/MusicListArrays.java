@@ -8,13 +8,6 @@ public class MusicListArrays {
     private ArrayList<MusicModel> normalMusicList;
     private ArrayList<MusicModel> favoriteMusicList;
 
-    //0 - removed, 1 - added, -1 - nothing
-    private int normalNotifier = -1;
-    private int favoriteNotifier = -1;
-    //positions
-    private int normalPosition = -1;
-    private int favoritePosition = -1;
-
     private static MusicListArrays inst = null;
 
     private MusicListArrays() {
@@ -230,40 +223,5 @@ public class MusicListArrays {
     public void setFavoriteArray(ArrayList<MusicModel> favoriteMusicList)
     {
         this.favoriteMusicList = favoriteMusicList;
-    }
-
-    //
-    //notifier stuff to update data between recyclerviews
-    //
-    public int getNormalNotifier() {
-        return normalNotifier;
-    }
-
-    public void setNormalNotifier(int normalNotifier) {
-        this.normalNotifier = normalNotifier;
-    }
-
-    public int getFavoriteNotifier() {
-        return favoriteNotifier;
-    }
-
-    public void setFavoriteNotifier(int favoriteNotifier) {
-        this.favoriteNotifier = favoriteNotifier;
-    }
-
-    public int getNormalPosition() {
-        return normalPosition;
-    }
-
-    public void setNormalPosition(int normalPosition) {
-        this.normalPosition = normalPosition;
-    }
-
-    public int getFavoritePosition() {
-        return favoritePosition;
-    }
-
-    public void setFavoritePosition(int favoritePosition) {
-        this.favoritePosition = favoritePosition;
     }
 }
