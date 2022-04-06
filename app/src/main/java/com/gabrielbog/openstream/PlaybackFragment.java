@@ -1,5 +1,6 @@
 package com.gabrielbog.openstream;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,15 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gabrielbog.openstream.models.MusicModel;
 import com.gabrielbog.openstream.models.MusicViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PlaybackFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PlaybackFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -37,14 +34,6 @@ public class PlaybackFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PlaybackFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static PlaybackFragment newInstance(String param1, String param2) {
         PlaybackFragment fragment = new PlaybackFragment();
@@ -81,14 +70,33 @@ public class PlaybackFragment extends Fragment {
         final Observer<MusicModel> nameObserver = new Observer<MusicModel>() {
             @Override
             public void onChanged(MusicModel musicModel) {
-                title.setText(musicModel.getTitle());
+                if(musicModel.getLink().equals(""))
+                    title.setText("Select a track!");
+                else
+                    title.setText(musicModel.getTitle());
             }
         };
 
         currentMusic.getMusic().observe(requireActivity(), nameObserver);
 
         //item listener to start a new activity with the elements from MusicModel
-        //todo
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentMusic.getMusic().getValue().getLink().equals("")) {
+                    Toast.makeText(getContext(), "Select a track first!", Toast.LENGTH_LONG).show();
+                }
+
+                else {
+
+                    MusicModel transferedData = currentMusic.getMusic().getValue();
+
+                    Intent intent = new Intent(getActivity(), MusicControlActivity.class);
+                    intent.putExtra("MUSIC_DATA", transferedData);
+                    startActivity(intent);
+                }
+            }
+        });
 
         return view;
     }

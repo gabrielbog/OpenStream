@@ -79,14 +79,13 @@ public class MusicListFragment extends Fragment implements RecyclerAdapter.Butto
         test = new MusicModel("x", "y", "z");
         musicListInstance.insertMusicElement(test);
 
-        test = new MusicModel("x", "z", "y");
+        test = new MusicModel("y", "x", "y");
         musicListInstance.insertMusicElement(test);
 
-        test = new MusicModel("x", "z", "z");
+        test = new MusicModel("z", "y", "z");
         musicListInstance.insertMusicElement(test);
 
         //recycler adapter setup
-
         adapterInstance = AdapterManager.getInstance();
         adapterInstance.getRecyclerAdapter().setButtonClickListener(this);
         adapterInstance.getRecyclerAdapter().setItemClickListener(this);
@@ -94,8 +93,6 @@ public class MusicListFragment extends Fragment implements RecyclerAdapter.Butto
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapterInstance.getRecyclerAdapter());
-
-        //add on touch listener, transfer data over PlaybackFragment via a static function
 
         return view;
     }

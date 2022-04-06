@@ -2,7 +2,9 @@ package com.gabrielbog.openstream.models;
 
 import androidx.lifecycle.ViewModel;
 
-public class MusicModel {
+import java.io.Serializable;
+
+public class MusicModel implements Serializable {
 
     private String title;
     private String author;

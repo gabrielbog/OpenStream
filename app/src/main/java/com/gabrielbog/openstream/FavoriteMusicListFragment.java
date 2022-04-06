@@ -81,7 +81,6 @@ public class FavoriteMusicListFragment extends Fragment implements RecyclerFavor
         */
 
         //recycler adapter setup
-
         adapterInstance = AdapterManager.getInstance();
         adapterInstance.getRecyclerFavoriteAdapter().setItemClickListener(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
