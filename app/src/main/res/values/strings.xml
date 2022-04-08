@@ -4,4 +4,12 @@
     <string name="hello_blank_fragment">Lorem Ipsum</string>
     <string name="author">Lovely</string>
     <string name="test_fragment">De aici opresc muzica</string>
+
+    <!-- Login/Register Activity Strings -->
+    <string name="welcome_title">Welcome to OpenStream</string>
+    <string name="username_text">Username</string>
+    <string name="password_text">Password</string>
+    <string name="login_button_text">Log In</string>
+    <string name="register_redirect_button_text">Create a new account</string>
+    <string name="register_button_text">Register</string>
 </resources>

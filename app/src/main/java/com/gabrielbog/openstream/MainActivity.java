@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.gabrielbog.openstream.models.MusicModel;
 import com.gabrielbog.openstream.models.MusicViewModel;
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentStateAdapter pagerAdapter;
     private MusicViewModel currentMusic;
 
-    //make static music list arrays and their respective getter/setter and inserter/remover
+    private int backButtonCount = 0;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -49,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                         if(position == 0)
-                            tab.setText("Lista");
+                            tab.setText("List");
                         else
-                            tab.setText("Favorite");
+                            tab.setText("Favorites");
                     }
                 }).attach();
 
@@ -69,5 +71,19 @@ public class MainActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(backButtonCount >= 1) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(this, "Press again to exit", Toast.LENGTH_LONG).show();
+            backButtonCount++;
+        }
     }
 }
