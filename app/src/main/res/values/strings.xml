@@ -12,4 +12,10 @@
     <string name="login_button_text">Log In</string>
     <string name="register_redirect_button_text">Create a new account</string>
     <string name="register_button_text">Register</string>
+
+    <!-- Main Activity Strings -->
+    <string name="username_greet">Welcome, user!</string>
+
+    <!-- Options Fragment Strings -->
+    <string name="upload_file">Upload a song</string>
 </resources>

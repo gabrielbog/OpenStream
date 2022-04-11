@@ -2,6 +2,8 @@ package com.gabrielbog.openstream;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,12 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.gabrielbog.openstream.models.MusicModel;
 import com.gabrielbog.openstream.models.MusicViewModel;
+import com.gabrielbog.openstream.threads.ClientThread;
+import com.gabrielbog.openstream.threads.Constants;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -28,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentStateAdapter pagerAdapter;
     private MusicViewModel currentMusic;
 
+    private String currentUser = "";
+
     private int backButtonCount = 0;
 
     public MainActivity() {
@@ -38,11 +46,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //get intent
+        Intent intent = getIntent();
+        currentUser = (String) intent.getSerializableExtra("USERNAME");
+
+        //request permission to read
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+        }
+        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            Toast.makeText(this, "Permission is required to read the stored data", Toast.LENGTH_LONG);
+        }
+        else {
+
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+
+        //update lists
+        String msg = Constants.sFolderReq + "-" + currentUser + "-";
+        new ClientThread(Constants.IP, Constants.PORT, msg);
+
         //get viewmodel, new or existing
         currentMusic = new ViewModelProvider(this).get(MusicViewModel.class);
 
         viewPager = findViewById(R.id.pager);
-        pagerAdapter = new FragmentAdapter(this);
+        pagerAdapter = new FragmentAdapter(this, currentUser);
         viewPager.setAdapter(pagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -52,8 +83,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                         if(position == 0)
                             tab.setText("List");
-                        else
+                        else if(position == 1)
                             tab.setText("Favorites");
+                        else
+                            tab.setText("Options");
                     }
                 }).attach();
 

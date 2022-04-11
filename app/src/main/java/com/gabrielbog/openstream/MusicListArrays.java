@@ -7,12 +7,14 @@ import java.util.ArrayList;
 public class MusicListArrays {
     private ArrayList<MusicModel> normalMusicList;
     private ArrayList<MusicModel> favoriteMusicList;
+    private int isPlaying;
 
     private static MusicListArrays inst = null;
 
     private MusicListArrays() {
         normalMusicList = new ArrayList<>();
         favoriteMusicList = new ArrayList<>();
+        isPlaying = 0;
     }
 
     public static MusicListArrays getInstance() {
@@ -223,5 +225,13 @@ public class MusicListArrays {
     public void setFavoriteArray(ArrayList<MusicModel> favoriteMusicList)
     {
         this.favoriteMusicList = favoriteMusicList;
+    }
+
+    public int getIsPlaying() {
+        return isPlaying;
+    }
+
+    public void setIsPlaying(int isPlaying) {
+        this.isPlaying = isPlaying;
     }
 }

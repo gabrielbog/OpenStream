@@ -1,33 +1,39 @@
 package com.gabrielbog.openstream;
 
 
+import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class FragmentAdapter extends FragmentStateAdapter {
 
+    private String currentUser = "";
+
     private MusicListFragment f1;
     private FavoriteMusicListFragment f2;
+    private OptionsFragment f3;
 
-    public FragmentAdapter(FragmentActivity fa) {
+    public FragmentAdapter(FragmentActivity fa, String currentUser) {
         super(fa);
+        this.currentUser = currentUser;
     }
 
     @Override
     public Fragment createFragment(int position) {
 
         if (position == 0) {
-            f1 = new MusicListFragment();
-            return  f1;
-        } else if (position == 1)
-            f2 = new FavoriteMusicListFragment();
-            return f2;
-        /* (else) */
+            return MusicListFragment.newInstance(currentUser);
+        } else if (position == 1){
+            return FavoriteMusicListFragment.newInstance(currentUser);
+        } else {
+            return OptionsFragment.newInstance(currentUser);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }

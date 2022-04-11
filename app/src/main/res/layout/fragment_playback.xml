@@ -36,10 +36,10 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/playback_previous_button"
+                android:id="@+id/playback_stop_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_baseline_skip_previous_24" />
+                android:src="@drawable/ic_baseline_stop_24" />
 
             <Space
                 android:layout_width="25dp"
@@ -50,16 +50,6 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_baseline_play_arrow_24" />
-
-            <Space
-                android:layout_width="25dp"
-                android:layout_height="wrap_content" />
-
-            <ImageView
-                android:id="@+id/playback_next_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_baseline_skip_next_24" />
 
         </LinearLayout>
 

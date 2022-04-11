@@ -6,13 +6,18 @@
     <ImageView
         android:id="@+id/albumCover"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:src="@drawable/ic_baseline_album_24"/>
 
     <LinearLayout
         android:layout_width="311dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="25dp" />
 
         <TextView
             android:id="@+id/musicTitle"

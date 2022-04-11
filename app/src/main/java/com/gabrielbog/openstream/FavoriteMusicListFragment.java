@@ -29,6 +29,8 @@ public class FavoriteMusicListFragment extends Fragment implements RecyclerFavor
     private String mParam1;
     private String mParam2;
 
+    private String currentUser = "";
+
     private RecyclerView recyclerView;
     private MusicListArrays favoriteMusicListInstance;
     private AdapterManager adapterInstance;
@@ -39,11 +41,10 @@ public class FavoriteMusicListFragment extends Fragment implements RecyclerFavor
         // Required empty public constructor
     }
 
-    public static FavoriteMusicListFragment newInstance(String param1, String param2) {
+    public static FavoriteMusicListFragment newInstance(String currentUser) {
         FavoriteMusicListFragment fragment = new FavoriteMusicListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("USERNAME", currentUser);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +53,7 @@ public class FavoriteMusicListFragment extends Fragment implements RecyclerFavor
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.currentUser = getArguments().getString("USERNAME");
         }
     }
 

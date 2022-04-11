@@ -40,6 +40,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                     ClientThread thread = new ClientThread(Constants.IP, Constants.PORT, msg);
                     thread.start();
+
+                    Intent intent = new Intent(view.getContext(), MainActivity.class);
+                    intent.putExtra("USERNAME", usernameRegisterBar.getText().toString());
+                    startActivity(intent);
+
                 }
                 else
                 {

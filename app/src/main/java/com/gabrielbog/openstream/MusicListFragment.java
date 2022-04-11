@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.gabrielbog.openstream.models.MusicModel;
 import com.gabrielbog.openstream.models.MusicViewModel;
+import com.gabrielbog.openstream.threads.ClientThread;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ public class MusicListFragment extends Fragment implements RecyclerAdapter.Butto
     private String mParam1;
     private String mParam2;
 
+    private String currentUser = "";
+
     private RecyclerView recyclerView;
     private MusicListArrays musicListInstance;
     private AdapterManager adapterInstance;
@@ -42,11 +45,10 @@ public class MusicListFragment extends Fragment implements RecyclerAdapter.Butto
         // Required empty public constructor
     }
 
-    public static MusicListFragment newInstance(String param1, String param2) {
+    public static MusicListFragment newInstance(String currentUser) {
         MusicListFragment fragment = new MusicListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("USERNAME", currentUser);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,8 +57,7 @@ public class MusicListFragment extends Fragment implements RecyclerAdapter.Butto
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.currentUser = getArguments().getString("USERNAME");
         }
     }
 
@@ -75,7 +76,6 @@ public class MusicListFragment extends Fragment implements RecyclerAdapter.Butto
         MusicModel test;
 
         //it would be a good idea to make a loading function, would be useful for loading data after uploading new music
-
         test = new MusicModel("x", "y", "z");
         musicListInstance.insertMusicElement(test);
 
