@@ -88,7 +88,7 @@ namespace Server
             {
                 SQLiteDataReader reader = null;
                 SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM users WHERE username='" + username + "';";
+                cmd.CommandText = "SELECT username FROM users WHERE username='" + username + "';";
 
                 try
                 {

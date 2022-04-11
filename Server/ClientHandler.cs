@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Data.SQLite;
 
+using System.IO;
+
 namespace Server
 {
     class ClientHandler
@@ -73,11 +75,11 @@ namespace Server
                 conn = SQLiteHandler.ConnectToDb();
                 if (SQLiteHandler.CheckUserCreditentials(conn, arrMsg[1], arrMsg[2]))
                 {
-                    sendResponse(Messages.sLoginOK);
+                    sendResponse("login-ok");
                 }
                 else
                 {
-                    sendResponse(Messages.sLoginInv);
+                    sendResponse("login-inv");
                 }
 
                 Console.WriteLine("Response sent");
@@ -99,17 +101,18 @@ namespace Server
                 if (!SQLiteHandler.CheckUser(conn, arrMsg[1]))
                 {
                     ok = true;
-                    sendResponse(Messages.sRegisterOK);
+                    sendResponse("regis-ok");
                 }
                 else
                 {
                     ok = false;
-                    sendResponse(Messages.sRegisterInv);
+                    sendResponse("regis-inv");
                 }
 
                 if(ok)
                 {
                     SQLiteHandler.InsertUser(conn, arrMsg[1], arrMsg[2]);
+                    Directory.CreateDirectory(cloudPath + "\\" + arrMsg[1]);
                 }
 
                 Console.WriteLine("Response sent");
@@ -122,10 +125,38 @@ namespace Server
             else if (arrMsg[0].StartsWith(Messages.sFolderReq))
             {
                 //get folder content
+                int i = 0;
+                DirectoryInfo folder = new DirectoryInfo(@cloudPath + "\\" + arrMsg[1]);
+
+                foreach (var file in folder.GetFiles("*.mp3"))
+                {
+                    sendResponse(file.Name);
+                    //send author
+                    sendResponse(i.ToString());
+                    ++i;
+                }
+                sendResponse("end");
             }
             else if (arrMsg[0].StartsWith(Messages.sDownloadReq))
             {
                 //download file
+                int i = 0;
+                bool found = false;
+                DirectoryInfo folder = new DirectoryInfo(@cloudPath + "\\" + arrMsg[1]);
+
+                foreach (var file in folder.GetFiles("*.mp3"))
+                {
+                    if(i == int.Parse(arrMsg[2]))
+                    {
+                        found = true;
+                        socket.SendFile(file.FullName);
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    sendResponse("end");
+                }
             }
             else if (arrMsg[0].StartsWith(Messages.sUploadReq))
             {
